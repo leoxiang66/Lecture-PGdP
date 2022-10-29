@@ -21,6 +21,14 @@ class WordCount:
         if count<0:
             raise RuntimeError(f"You entered invalid absolute frequency: {count}.")
         self.count = count
+    
+    def __str__(self) -> str:
+        return f'''{{Word: {self.word}, Count: {self.count}}}'''
+    
+    def __repr__(self) -> str:
+        return f'''{{Word: '{self.word}', Count: {self.count}}}'''
+    
+        
 
 
 
@@ -39,3 +47,8 @@ class WordCountList:
         return self.__list__[idx].getCount()
     def setCount(self,idx: int, count: int):
         self.__list__[idx].setCount(count)
+    def __str__(self) -> str:
+        return str(self.__list__)
+    
+    def __repr__(self) -> str:
+        return str(self.__list__)

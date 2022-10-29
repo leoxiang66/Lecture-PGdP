@@ -10,3 +10,11 @@ if __name__ == '__main__':
                     )
 
     print(docu)
+    print(Document.__findSuffix__('hallo'))
+    print(Document.__findSuffix__('guten'))
+    print(Document.__findSuffix__('tag'))
+    print(Document.__findSuffix__('durch'))
+    print(Document.__findSuffix__('Tisch'))
+    print(Document.__getWordstamm__('Tisch'))
+    docu.addContent('Ich bin ein Student an Technische Universitaet Muenchen. Ich studiere Informatik. Muenchen ist eine schoene Stadt.')
+    print(docu.getWordCounts())
