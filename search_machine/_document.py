@@ -22,7 +22,18 @@ class Document(DictForm):
         
         # setup word counts
         self.addContent(content)
-        
+
+    # def getDict(self) -> dict:
+    #     # return dict(
+    #     #     title = self.title,
+    #     #     content = self.content,
+    #     #     abstract = self.abstract,
+    #     #     language = self.language,
+    #     #     publication_date  = self.publication_date.getDict(),
+    #     #     self
+    #     # )
+    #
+
 
     def __str__(self) -> str:
         ret = f'{self.title}'
@@ -35,6 +46,7 @@ class Document(DictForm):
     
     def getWordCounts(self) -> WordCountList:
         return self.word_counts
+
 
     @classmethod
     def __tokenize__(cls,text: str):
@@ -83,4 +95,11 @@ class Document(DictForm):
                 tmp[i] += 1
         for word,count in tmp.items():
             self.word_counts.add(word,count)
+
+
+
+
+
+
+
     

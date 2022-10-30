@@ -1,3 +1,5 @@
+import math
+
 from .utils import DictForm
 
 class WordCount(DictForm):
@@ -40,12 +42,27 @@ class WordCountList:
         self.__list__ = []
 
     def add(self,word:str, count: int):
-        self.__list__.append(WordCount(word,count))
+        idx = self.getIndexofWord(word)
+        if  idx == -1:
+            self.__list__.append(WordCount(word, count))
+        else:
+            self.__list__[idx].setCount(self.__list__[idx].count + count)
+
     def __len__(self):
         return len(self.__list__)
     def getWord(self,idx: int):
+        if not idx in range(len(self.__list__)):
+            return None
         return self.__list__[idx].getWord()
+    def getIndexofWord(self,word: str):
+        for id,i in enumerate(self.__list__):
+            if word == i.getWord():
+                return id
+        return -1
+
     def getCount(self,idx: int):
+        if not idx in range(len(self.__list__)):
+            return None
         return self.__list__[idx].getCount()
     def setCount(self,idx: int, count: int):
         self.__list__[idx].setCount(count)
@@ -54,3 +71,37 @@ class WordCountList:
     
     def __repr__(self) -> str:
         return str(self.__list__)
+
+    def wordsEqual(self,wca):
+        '''
+        check whether the words and order of words equals (not considering the counts)
+        :param wca:
+        :return:
+        '''
+        if not isinstance(wca,self.__class__):
+            return False
+        if len(self) != len(wca):
+            return False
+        length = len(self)
+        for i in range(length):
+            if self.getWord(i) != wca.getWord(i):
+                return False
+        return True
+
+    def scalarProduct(self,wca):
+        if not self.wordsEqual(wca):
+            return 0
+
+        return sum([self.getCount(i)*wca.getCount(i) for i in range(len(self))])
+    def sort(self,reverse: bool = False):
+        self.__list__.sort(key= lambda x: x.count,reverse = reverse)
+
+    def computeSimilarity(self, wca):
+        if not isinstance(wca,self.__class__):
+            return 0
+        self.sort()
+        wca.sort()
+
+        return self.scalarProduct(wca) / math.sqrt(self.scalarProduct(self) * wca.scalarProduct(wca))
+
+

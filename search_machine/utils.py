@@ -8,6 +8,17 @@ def valid_email(email):
         return False
     
 
-class DictForm:
-    def getDict(self):
-        raise NotImplementedError
+class DictForm(object):
+    def getDict(self) -> dict:
+        ret = dict()
+        for attr, value in self.__dict__.items():
+            if hasattr(value,'getDict'):
+                ret[attr] = value.getDict()
+            else:
+                ret[attr] = value
+        return ret
+
+    def __eq__(self, o: object) -> bool:
+        if not isinstance(o,self.__class__):
+            return False
+        return self.getDict() == o.getDict()

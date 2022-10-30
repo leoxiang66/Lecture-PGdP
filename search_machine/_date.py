@@ -12,10 +12,9 @@ class Date(DictForm):
     def __str__(self) -> str:
         return f'''{self.year}-{self.month}-{self.day}'''
     
-    def __eq__(self, o: object) -> bool:
-        if not isinstance(o, Date):
-            return False
-        # if self.year == o.year and self.month == o.month and self
+
+
+
 
     
 
