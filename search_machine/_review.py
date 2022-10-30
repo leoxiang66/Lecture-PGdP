@@ -1,8 +1,9 @@
 from ._author import Author
 from ._document import Document
 from ._date import Date
+from .utils import DictForm
 
-class Review:
+class Review(DictForm):
     def __init__(self,
                  content: str,
                  author: Author,

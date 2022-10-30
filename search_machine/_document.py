@@ -1,8 +1,9 @@
 from ._date import Date
 from ._author import Author
 from ._wordcount import WordCountList
+from .utils import DictForm
 
-class Document:
+class Document(DictForm):
     SUFFICES = ['ab', 'al', 'ant', 'artig', 'bar', 'chen', 'ei', 'eln', 'en', 'end', 'ent', 'er', 'fach', 'fikation', 'fizieren', 'fähig',
 'gemäß', 'gerecht', 'haft', 'haltig', 'heit', 'ie', 'ieren', 'ig', 'in', 'ion', 'iren', 'isch', 'isieren', 'isierung',
 'ismus', 'ist', 'ität', 'iv', 'keit', 'kunde', 'legen', 'lein', 'lich', 'ling', 'logie', 'los', 'mal', 'meter', 'mut',
@@ -21,7 +22,7 @@ class Document:
         
         # setup word counts
         self.addContent(content)
-
+        
 
     def __str__(self) -> str:
         ret = f'{self.title}'
@@ -82,3 +83,4 @@ class Document:
                 tmp[i] += 1
         for word,count in tmp.items():
             self.word_counts.add(word,count)
+    

@@ -18,3 +18,5 @@ if __name__ == '__main__':
     print(Document.__getWordstamm__('Tisch'))
     docu.addContent('Ich bin ein Student an Technische Universitaet Muenchen. Ich studiere Informatik. Muenchen ist eine schoene Stadt.')
     print(docu.getWordCounts())
+    print()
+    print(docu.__dict__)

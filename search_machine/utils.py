@@ -6,3 +6,8 @@ def valid_email(email):
         return True
     else:
         return False
+    
+
+class DictForm:
+    def getDict(self):
+        raise NotImplementedError

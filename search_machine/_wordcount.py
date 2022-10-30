@@ -1,4 +1,6 @@
-class WordCount:
+from .utils import DictForm
+
+class WordCount(DictForm):
     '''
     represents a word and its absolute frequency in a document
     '''
