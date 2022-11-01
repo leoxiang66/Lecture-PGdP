@@ -8,6 +8,7 @@ class Document(DictForm):
 'gemäß', 'gerecht', 'haft', 'haltig', 'heit', 'ie', 'ieren', 'ig', 'in', 'ion', 'iren', 'isch', 'isieren', 'isierung',
 'ismus', 'ist', 'ität', 'iv', 'keit', 'kunde', 'legen', 'lein', 'lich', 'ling', 'logie', 'los', 'mal', 'meter', 'mut',
 'nis', 'or', 'sam', 'schaft', 'tum', 'ung', 'voll', 'wert', 'würdig']
+    SUFFICES.sort(key= lambda x:len(x),reverse=True)
     PUNTUCATION = ['.', ',', '?', '!', ':', ';', '...', '-']
     
     def __init__(self, title: str, content: str, abstract: str, language:str, publication_date: Date,author: Author) -> None:
@@ -22,17 +23,6 @@ class Document(DictForm):
         
         # setup word counts
         self.addContent(content)
-
-    # def getDict(self) -> dict:
-    #     # return dict(
-    #     #     title = self.title,
-    #     #     content = self.content,
-    #     #     abstract = self.abstract,
-    #     #     language = self.language,
-    #     #     publication_date  = self.publication_date.getDict(),
-    #     #     self
-    #     # )
-    #
 
 
     def __str__(self) -> str:
@@ -95,6 +85,18 @@ class Document(DictForm):
                 tmp[i] += 1
         for word,count in tmp.items():
             self.word_counts.add(word,count)
+        self.word_counts.sort()
+
+    def addZeroCountWord(self, word: str):
+        word = self.__removePunc__(word)
+        # wordstamms = self.__getWordstamm__(word)
+        self.word_counts.add(word, 0)
+        self.word_counts.sort()
+
+    def count(self,word:str):
+        return self.word_counts.count(word)
+
+
 
 
 

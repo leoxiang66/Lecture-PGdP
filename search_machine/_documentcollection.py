@@ -1,11 +1,13 @@
 from ._document import Document
+from ._wordcount import WordCountList
 
 class DocumentCollectionCell:
     def __init__(self, doc: Document):
+        assert doc is not None
         self.__document__ = doc
         self.__next__ = None
 
-    def getDocument(self):
+    def getDocument(self) -> Document:
         return self.__document__
     
     def setNext(self,o: object):
@@ -24,6 +26,7 @@ class DocumentCollection:
         self.__start__ = None
         self.__end__ = self.__start__
         self.__num__ = 0
+        self.similarities = None
         
     def __assert__(self):
         if self.__num__ > 0:
@@ -126,7 +129,11 @@ class DocumentCollection:
         self.__assert__()
 
     def get(self,idx: int):
-        return self.getDocumentCellAt(idx)
+        if idx >= 0:
+            return self.getDocumentCellAt(idx).getDocument()
+        else:
+            idx += self.__len__()
+            return self.getDocumentCellAt(idx).getDocument()
 
     def __iter__(self):
         self.__pointer__ = self.__start__
@@ -157,6 +164,40 @@ class DocumentCollection:
 
             return False
 
+    def allWords(self) -> WordCountList:
+        ret = WordCountList()
+        for cell in self:
+            doc = cell.getDocument()
+            wordcounts = doc.getWordCounts() # wordcountslist
+            ret.extend(wordcounts)
+        return ret
+
+
+    def addZeroWordsToDocuments(self):
+        allwords = self.allWords()
+        for wc in allwords:
+            word = wc.word
+            for cell in self:
+                cell.getDocument().addZeroCountWord(word)
+
+    def match(self, searchQuery: str):
+        query_doc = Document(None,searchQuery,None,None,None,None)
+        self.appendDocument(query_doc)
+        self.addZeroWordsToDocuments()
+        similarities = []
+        for i in range(len(self)-1):
+            cell = self.getDocumentCellAt(i)
+            similarities.append(cell.getDocument().getWordCounts().computeSimilarity(query_doc.getWordCounts()))
+
+        self.similarities = similarities
+        self.removeLastDocument()
+        self.__assert__()
+
+    # subscriptable and slice-able
+    def __getitem__(self, n):
+        return self.get(n)
+    def getQuerySimilarity(self,idx:int):
+        return self.similarities[idx]
 
 
 

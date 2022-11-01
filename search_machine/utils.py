@@ -22,3 +22,18 @@ class DictForm(object):
         if not isinstance(o,self.__class__):
             return False
         return self.getDict() == o.getDict()
+
+
+def truncate(text: str, padding_len: int, max_len:int):
+    result = ''
+    i = 0
+    while i+max_len < len(text):
+        result += text[i:i+max_len].strip() +'\n' +' ' * padding_len
+        i+= max_len
+
+    result += text[i:].strip() +'\n'
+    return result
+
+if __name__ == '__main__':
+    print(truncate('''Fügt der DocumentCollection ein neues Document mit dem Titel Titel und demFließtext fliesstext des dokumentes hinzu. Titel und Fließtext werden dabei durch einen Doppelpunkt (:) getrennt.''',40,20))
+

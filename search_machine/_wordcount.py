@@ -32,7 +32,13 @@ class WordCount(DictForm):
     def __repr__(self) -> str:
         return f'''{{Word: '{self.word}', Count: {self.count}}}'''
     
-        
+    def __copy__(self):
+        return WordCount(self.word,self.count)
+    def __deepcopy__(self, memodict={}):
+        return self.__copy__()
+
+    def __hash__(self):
+        return id(self)
 
 
 
@@ -90,18 +96,66 @@ class WordCountList:
 
     def scalarProduct(self,wca):
         if not self.wordsEqual(wca):
-            return 0
+            raise RuntimeError('Number of words are not equal.')
 
         return sum([self.getCount(i)*wca.getCount(i) for i in range(len(self))])
     def sort(self,reverse: bool = False):
-        self.__list__.sort(key= lambda x: x.count,reverse = reverse)
+        self.__list__.sort(key=lambda x: x.word, reverse=reverse)
+        # self.__list__.sort(key= lambda x: x.count,reverse = reverse)
+
 
     def computeSimilarity(self, wca):
         if not isinstance(wca,self.__class__):
-            return 0
+            raise TypeError('Not the samle class.')
         self.sort()
         wca.sort()
 
         return self.scalarProduct(wca) / math.sqrt(self.scalarProduct(self) * wca.scalarProduct(wca))
 
+    def __copy__(self):
+        new = WordCountList()
+        new.__list__ = [x.__copy__() for x in self.__list__]
+        return new
 
+    def copy(self):
+        return self.__copy__()
+
+    # subscriptable and slice-able
+    def __getitem__(self, n):
+        return self.__list__[n]
+
+
+
+    def __add__(self, other):
+        if not isinstance(other,self.__class__):
+            raise TypeError('The object is not of the same class.')
+        else:
+            new = self.copy()
+            for wc in other.__list__:
+                idx = new.getIndexofWord(wc.word)
+                if idx == -1:
+                    new.add(wc.word,wc.count)
+                else:
+                    new[idx].incCount(wc.count)
+            new.sort()
+            return new
+
+    def extend(self, other):
+        if not isinstance(other, self.__class__):
+            raise TypeError("The object is not of the same class")
+        else:
+            for wc in other.__list__:
+                idx = self.getIndexofWord(wc.word)
+                if idx == -1:
+                    self.add(wc.word,wc.count)
+                else:
+                    self[idx].incCount(wc.count)
+
+        self.sort()
+
+    def count(self,word:str):
+        idx = self.getIndexofWord(word)
+        if idx == -1:
+            return 0
+        else:
+            return self[idx].count

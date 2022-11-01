@@ -33,3 +33,5 @@ if __name__ == '__main__':
     print(docu.getWordCounts())
 
     print(docu.getWordCounts().computeSimilarity(docu.word_counts))
+
+    sm.cli()
